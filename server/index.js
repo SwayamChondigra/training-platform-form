@@ -5,6 +5,7 @@ const { Parser } = require("json2csv");
 const { Resend } = require("resend");
 const PORT = process.env.PORT || 5000;
 const app = express();
+const { google } = require("googleapis");
 
 app.use(cors({
   origin: "*"
@@ -57,22 +58,42 @@ const saveToCSV = (data) => {
    🚀 MAIN API
 ========================= */
 
-app.post("/api/form", (req, res) => {
+app.post("/api/form", async (req, res) => {
   const { name, gender, profession, goal, phone, email } = req.body;
 
   try {
+    // Save CSV
     saveToCSV({ name, gender, profession, goal, phone, email });
 
-    console.log("Saved:", name);
+    // 🔥 ADD THIS
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: "Sheet1!A1",
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [[name, email, phone, profession, gender, goal]],
+      },
+    });
 
-    // ✅ send response
+    console.log("Saved to CSV + Google Sheets:", name);
+
     res.status(200).json({ message: "Success" });
 
   } catch (error) {
-    console.error(error);
+    console.error("ERROR:", error);
     res.status(500).json({ message: "Error saving data" });
   }
 });
+
+const auth = new google.auth.GoogleAuth({
+  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+});
+
+const sheets = google.sheets({ version: "v4", auth });
+
+const SPREADSHEET_ID = "1KjCIqLeneyxf_xhmX7-zeKhYj4YFl37UCVvH1inALT0";
+
 
 /* =========================
    🌐 TEST ROUTE
