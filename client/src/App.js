@@ -12,7 +12,6 @@ function App() {
     email: "",
   });
 
-  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,7 +33,6 @@ function App() {
       );
 
       if (res.status === 200) {
-        setSubmitted(true);
 
         setTimeout(() => {
           window.location.href =
@@ -49,6 +47,17 @@ function App() {
     }
   };
 
+  if (submitted) {
+  return (
+    <div className="success-page">
+      <div className="success-card">
+        <img src={eagle} alt="eagle" className="success-logo" />
+        <h2>You're In!</h2>
+        <p>Redirecting you to WhatsApp...</p>
+      </div>
+    </div>
+  );
+}
   
   return (
     <div className="page">
