@@ -1,0 +1,347 @@
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #1a1a1a, #0a0a0a);
+  color: white;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* 🌟 Floating background glow */
+.page::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: gold;
+  filter: blur(150px);
+  opacity: 0.15;
+  top: -100px;
+  left: -100px;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(40px);
+  }
+}
+
+/* Page center */
+.page {
+  min-height: 100vh;
+  padding:20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+}
+
+/* Card */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+
+  animation: fadeUp 1s ease;
+  transition: 0.3s;
+}
+
+/* Hover effect */
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* Heading */
+.card h1 {
+  margin-bottom: 10px;
+  color: gold;
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #222;
+  color: white;
+  transition: 0.3s;
+}
+
+/* Input focus glow */
+input:focus {
+  box-shadow: 0 0 10px gold;
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: none;
+  background: gold;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Button hover animation */
+button:hover {
+  background: #ffd700cc;
+  transform: scale(1.05);
+}
+
+/* Logo container */
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* 🦅 Bigger eagle */
+.brand img {
+  width: 100px; /* 🔥 increased */
+  height: 80px;
+  object-fit: contain;
+
+  filter: drop-shadow(0 0 12px gold);
+  transition: 0.3s;
+    transform: translateX(15px);
+
+}
+
+/* hover effect */
+.brand img:hover {
+  transform: scale(1.1);
+}
+
+/* Text */
+.brand h2 {
+  color: gold;
+  font-size: 22px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  padding-right: 20px;
+  /* ✨ glow effect */
+  text-shadow:
+    0 0 5px rgba(255, 215, 0, 0.6),
+    0 0 10px rgba(255, 215, 0, 0.5),
+    0 0 20px rgba(255, 215, 0, 0.4);
+  animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #222;
+  color: white;
+}
+
+.success-page {
+  min-height: 100vh;
+  padding:20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.success-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  width: 350px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+
+  animation: fadeUp 0.8s ease;
+}
+
+.success-card h2 {
+  color: gold;
+  font-size: 26px;
+  margin-bottom: 10px;
+
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+.success-card p {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.success-icon {
+  font-size: 40px;
+  margin-top: 20px;
+}
+.success-logo {
+  width: 90px;   /* 🔥 bigger */
+  margin-bottom: 15px;
+
+  filter: drop-shadow(0 0 20px gold);
+  animation: logoPop 0.8s ease;
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+/* Pop animation */
+@keyframes logoPop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Fade-in animation */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ✨ Animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 5px rgba(255, 215, 0, 0.6),
+      0 0 10px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    text-shadow:
+      0 0 10px rgba(255, 215, 0, 0.9),
+      0 0 25px rgba(255, 215, 0, 0.7);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+
+  body {
+    overflow-y: auto;
+  }
+
+  .page {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .success-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 25px;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand img {
+    width: 55px;
+    height: auto;
+    transform: none;
+  }
+
+  .brand h2 {
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  input, select, textarea {
+    font-size: 14px;
+    padding: 11px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .success-logo {
+    width: 80px;
+  }
+
+  /* 🔥 Fix glow overflow */
+  .page::before {
+    width: 250px;
+    height: 250px;
+    filter: blur(120px);
+    top: -80px;
+    left: -80px;
+  }
+}
