@@ -75,68 +75,26 @@ app.post("/api/form", async (req, res) => {
     // 💾 Save to CSV
     saveToCSV({ name, gender, profession, goal, phone, email });
 
-    console.log("Saved:", name);
-    console.log("Sending email...");
-    // 📩 Send Email
-    await transporter.sendMail({
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Join Our WhatsApp Community",
-      html: `
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#111; padding:30px 10px;">
-  <tr>
-    <td align="center">
+    console.log("STEP 1: Before transporter.verify");
 
-      <table width="100%" style="max-width:480px; background:#1c1c1c; border-radius:12px; padding:30px; font-family:Arial; color:white; text-align:center;">
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log("❌ VERIFY ERROR:", error);
+  } else {
+    console.log("✅ SERVER READY");
+  }
+});
 
-        <!-- Logo / Brand -->
-        <tr>
-          <td>
-            <h2 style="color:gold; margin:0; letter-spacing:1px;">
-              FOREVER LIVING
-            </h2>
-          </td>
-        </tr>
+console.log("STEP 2: Before sendMail");
 
-        <!-- Greeting -->
-        <tr>
-          <td style="padding-top:20px;">
-            <h3 style="margin:0;">Hey ${name} 👋</h3>
-          </td>
-        </tr>
+await transporter.sendMail({
+  from: process.env.EMAIL,
+  to: email,
+  subject: "Join Our WhatsApp Community",
+  html: `<h1>Test Mail</h1>`,
+});
 
-        <!-- Message -->
-        <tr>
-          <td style="padding-top:10px; color:#ccc; line-height:1.6;">
-            Thanks for joining our community.<br/>
-            Click below to join our WhatsApp community.
-          </td>
-        </tr>
-
-        <!-- Button -->
-        <tr>
-          <td style="padding:25px 0;">
-            <a href="${whatsappLink}" 
-               style="background:#25D366; padding:14px 30px; color:white; text-decoration:none; border-radius:8px; font-weight:bold; display:inline-block;">
-               Join Now
-            </a>
-          </td>
-        </tr>
-
-        <!-- Footer -->
-        <tr>
-          <td style="font-size:12px; color:#777;">
-            If you didn’t request this, you can ignore this email.
-          </td>
-        </tr>
-
-      </table>
-
-    </td>
-  </tr>
-</table>
-`,
-    });
+console.log("STEP 3: After sendMail");
 
     console.log("Email sent");
         res.status(200).json({ message: "Success" });
