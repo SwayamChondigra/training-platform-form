@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const { Parser } = require("json2csv");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const PORT = process.env.PORT || 5000;
 const app = express();
 
@@ -15,16 +15,7 @@ require("dotenv").config();
 /* =========================
    📩 EMAIL CONFIG (GMAIL)
 ========================= */
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /* =========================
    📁 CSV SAVE FUNCTION
@@ -75,26 +66,63 @@ app.post("/api/form", async (req, res) => {
     // 💾 Save to CSV
     saveToCSV({ name, gender, profession, goal, phone, email });
 
-    console.log("STEP 1: Before transporter.verify");
-
-transporter.verify(function (error, success) {
-  if (error) {
-    console.log("❌ VERIFY ERROR:", error);
-  } else {
-    console.log("✅ SERVER READY");
-  }
-});
-
-console.log("STEP 2: Before sendMail");
-
-await transporter.sendMail({
-  from: process.env.EMAIL,
+    console.log("Saved:", name);
+    console.log("Sending email...");
+    // 📩 Send Email
+    await resend.emails.send({
+  from: "onboarding@resend.dev", // keep this for now
   to: email,
   subject: "Join Our WhatsApp Community",
-  html: `<h1>Test Mail</h1>`,
-});
+  html: `
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#111; padding:30px 10px;">
+  <tr>
+    <td align="center">
 
-console.log("STEP 3: After sendMail");
+      <table width="100%" style="max-width:480px; background:#1c1c1c; border-radius:12px; padding:30px; font-family:Arial; color:white; text-align:center;">
+
+        <tr>
+          <td>
+            <h2 style="color:gold; margin:0; letter-spacing:1px;">
+              FOREVER LIVING
+            </h2>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding-top:20px;">
+            <h3 style="margin:0;">Hey ${name} 👋</h3>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding-top:10px; color:#ccc; line-height:1.6;">
+            Thanks for joining our community.<br/>
+            Click below to join our WhatsApp community.
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:25px 0;">
+            <a href="${whatsappLink}" 
+               style="background:#25D366; padding:14px 30px; color:white; text-decoration:none; border-radius:8px; font-weight:bold; display:inline-block;">
+               Join Now
+            </a>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="font-size:12px; color:#777;">
+            If you didn’t request this, you can ignore this email.
+          </td>
+        </tr>
+
+      </table>
+
+    </td>
+  </tr>
+</table>
+`,
+});
 
     console.log("Email sent");
         res.status(200).json({ message: "Success" });
