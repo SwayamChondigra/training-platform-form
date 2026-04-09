@@ -74,10 +74,10 @@ app.post("/api/form", async (req, res) => {
     saveToCSV({ name, gender, profession, goal, phone, email });
 
     console.log("Saved:", name);
-
+    console.log("Sending email...");
     // 📩 Send Email
     await transporter.sendMail({
-      from: "your_email@gmail.com",
+      from: process.env.EMAIL,
       to: email,
       subject: "Join Our WhatsApp Community",
       html: `
@@ -137,10 +137,9 @@ app.post("/api/form", async (req, res) => {
     });
 
     console.log("Email sent");
-    res.status(200).json({ message: "Success" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error processing form" });
+    console.error("❌ Email error:", error);
+
   }
 });
 
