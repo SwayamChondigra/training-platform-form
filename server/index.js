@@ -17,7 +17,9 @@ require("dotenv").config();
 ========================= */
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL,
     pass: process.env.PASS,
@@ -137,8 +139,12 @@ app.post("/api/form", async (req, res) => {
     });
 
     console.log("Email sent");
+        res.status(200).json({ message: "Success" });
+
   } catch (error) {
     console.error("❌ Email error:", error);
+    res.status(500).json({ message: "Error processing form" });
+
 
   }
 });
