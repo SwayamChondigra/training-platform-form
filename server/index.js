@@ -137,15 +137,10 @@ app.post("/api/form", async (req, res) => {
     });
 
     console.log("Email sent");
-
-    // 📲 SMS (COMING NEXT STEP)
-    // Here we will integrate Fast2SMS / Twilio
-    // console.log("SMS sent");
-
-    res.send("Form submitted successfully");
+    res.status(200).json({ message: "Success" });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error processing form");
+    res.status(500).json({ message: "Error processing form" });
   }
 });
 
