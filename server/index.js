@@ -57,81 +57,20 @@ const saveToCSV = (data) => {
    🚀 MAIN API
 ========================= */
 
-app.post("/api/form", async (req, res) => {
+app.post("/api/form", (req, res) => {
   const { name, gender, profession, goal, phone, email } = req.body;
 
-  const whatsappLink = "https://chat.whatsapp.com/GfFOtRNuPwoH54i5ESMBZI";
-
   try {
-    // 💾 Save to CSV
     saveToCSV({ name, gender, profession, goal, phone, email });
 
     console.log("Saved:", name);
-    console.log("Sending email...");
-    // 📩 Send Email
-    await resend.emails.send({
-  from: "onboarding@resend.dev", // keep this for now
-  to: "sbc251206@gmail.com",
-  subject: "Join Our WhatsApp Community",
-  html: `
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#111; padding:30px 10px;">
-  <tr>
-    <td align="center">
 
-      <table width="100%" style="max-width:480px; background:#1c1c1c; border-radius:12px; padding:30px; font-family:Arial; color:white; text-align:center;">
-
-        <tr>
-          <td>
-            <h2 style="color:gold; margin:0; letter-spacing:1px;">
-              FOREVER LIVING
-            </h2>
-          </td>
-        </tr>
-
-        <tr>
-          <td style="padding-top:20px;">
-            <h3 style="margin:0;">Hey ${name} 👋</h3>
-          </td>
-        </tr>
-
-        <tr>
-          <td style="padding-top:10px; color:#ccc; line-height:1.6;">
-            Thanks for joining our community.<br/>
-            Click below to join our WhatsApp community.
-          </td>
-        </tr>
-
-        <tr>
-          <td style="padding:25px 0;">
-            <a href="${whatsappLink}" 
-               style="background:#25D366; padding:14px 30px; color:white; text-decoration:none; border-radius:8px; font-weight:bold; display:inline-block;">
-               Join Now
-            </a>
-          </td>
-        </tr>
-
-        <tr>
-          <td style="font-size:12px; color:#777;">
-            If you didn’t request this, you can ignore this email.
-          </td>
-        </tr>
-
-      </table>
-
-    </td>
-  </tr>
-</table>
-`,
-});
-
-    console.log("Email sent");
-        res.status(200).json({ message: "Success" });
+    // ✅ send response
+    res.status(200).json({ message: "Success" });
 
   } catch (error) {
-    console.error("❌ Email error:", error);
-    res.status(500).json({ message: "Error processing form" });
-
-
+    console.error(error);
+    res.status(500).json({ message: "Error saving data" });
   }
 });
 
