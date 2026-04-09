@@ -1,31 +1,22 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
-const { Parser } = require("json2csv");
-const { Resend } = require("resend");
-const PORT = process.env.PORT || 5000;
-const app = express();
 const { google } = require("googleapis");
 
-app.use(cors({
-  origin: "*"
-}));
-app.use(express.json());
-
 require("dotenv").config();
-/* =========================
-   📩 EMAIL CONFIG (GMAIL)
-========================= */
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors({ origin: "*" }));
+app.use(express.json());
 
 /* =========================
    📁 CSV SAVE FUNCTION
 ========================= */
-
 const saveToCSV = (data) => {
   const filePath = "leads.csv";
 
-  // Ensure all fields exist (no undefined)
   const row = {
     name: data.name || "",
     email: data.email || "",
@@ -55,50 +46,63 @@ const saveToCSV = (data) => {
 };
 
 /* =========================
+   📊 GOOGLE SHEETS SETUP
+========================= */
+let sheets;
+
+try {
+  const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+
+  const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
+
+  sheets = google.sheets({ version: "v4", auth });
+
+  console.log("✅ Google Sheets connected");
+
+} catch (err) {
+  console.error("❌ Google Sheets ERROR:", err);
+}
+
+const SPREADSHEET_ID = "1KjCIqLeneyxf_xhmX7-zeKhYj4YFl37UCVvH1inALT0";
+
+/* =========================
    🚀 MAIN API
 ========================= */
-
 app.post("/api/form", async (req, res) => {
   const { name, gender, profession, goal, phone, email } = req.body;
 
   try {
-    // Save CSV
+    // 💾 Save to CSV
     saveToCSV({ name, gender, profession, goal, phone, email });
 
-    // 🔥 ADD THIS
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: "Sheet1!A1",
-      valueInputOption: "USER_ENTERED",
-      requestBody: {
-        values: [[name, email, phone, profession, gender, goal]],
-      },
-    });
+    // 📊 Save to Google Sheets
+    if (sheets) {
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: SPREADSHEET_ID,
+        range: "Sheet1!A1",
+        valueInputOption: "USER_ENTERED",
+        requestBody: {
+          values: [[name, email, phone, profession, gender, goal]],
+        },
+      });
+    }
 
-    console.log("Saved to CSV + Google Sheets:", name);
+    console.log("✅ Saved:", name);
 
     res.status(200).json({ message: "Success" });
 
   } catch (error) {
-    console.error("ERROR:", error);
+    console.error("❌ ERROR:", error);
     res.status(500).json({ message: "Error saving data" });
   }
 });
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
-  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-});
-
-const sheets = google.sheets({ version: "v4", auth });
-
-const SPREADSHEET_ID = "1KjCIqLeneyxf_xhmX7-zeKhYj4YFl37UCVvH1inALT0";
-
-
 /* =========================
    🌐 TEST ROUTE
 ========================= */
-
 app.get("/", (req, res) => {
   res.send("API Running ✅");
 });
@@ -106,7 +110,6 @@ app.get("/", (req, res) => {
 /* =========================
    ▶️ START SERVER
 ========================= */
-
 app.listen(PORT, () => {
-  console.log("Server running on port", PORT);
+  console.log("🚀 Server running on port", PORT);
 });
