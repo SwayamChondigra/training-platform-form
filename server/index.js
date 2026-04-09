@@ -70,8 +70,8 @@ app.post("/api/form", async (req, res) => {
     console.log("Sending email...");
     // 📩 Send Email
     await resend.emails.send({
-  from: "Forever Living <sbc251206@gmail.com>", // keep this for now
-  to: "sbc25120@gmail.com",
+  from: "onboarding@resend.dev", // keep this for now
+  to: "sbc251206@gmail.com",
   subject: "Join Our WhatsApp Community",
   html: `
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#111; padding:30px 10px;">
