@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+require("dotenv").config();
 /* =========================
    📩 EMAIL CONFIG (GMAIL)
 ========================= */
@@ -16,8 +17,8 @@ app.use(express.json());
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "sbc251206@gmail.com",
-    pass: "yxbb qptg ersk uahq",
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
   },
 });
 
