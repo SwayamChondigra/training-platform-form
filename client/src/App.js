@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import "./App.css";
-import eagle from "./assets/eagle.png";
 
 function App() {
   const [form, setForm] = useState({
@@ -54,8 +53,7 @@ function App() {
     <div className="page">
       <div className="card">
         <div className="brand">
-          <img src={eagle} alt="eagle" />
-          <h2>FOREVER LIVING</h2>
+          <h2>Smart Income Program</h2>
         </div>
 
         <h1>Join Our Community</h1>
